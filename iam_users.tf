@@ -1,8 +1,5 @@
 locals {
-  iam_users  = csvdecode(file(format("./csv/users.csv")))
-  for_each   = { for index, user in aws_iam_user.users : index => user }
-  users      = [each.value.name]
-  depends_on = [aws_iam_user.users]
+  iam_users = csvdecode(file(format("./csv/users.csv")))
 }
 
 resource "aws_iam_user" "users" {

@@ -8,7 +8,7 @@ resource "aws_iam_user" "users" {
   name = each.value.name
 
   tags = {
-    "groups" = each.value.name
+    "groups" = each.value.group
   }
 }
 

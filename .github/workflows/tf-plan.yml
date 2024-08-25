@@ -1,10 +1,9 @@
----
-name: TF-Deployment
-'on':
-  push:
+name: pull_request_validation
+on:
+  pull_request:
     branches: ['main']
 jobs:
-  deploy-terraform:
+  validate-terraform:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,7 +20,9 @@ jobs:
           aws-region: eu-west-2
       - name: Terraform Init
         run: terraform init
+      - name: Terraform Validate
+        run: terraform validate
       - name: Terraform Plan
-        run: terraform plan
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform plan 
+      - name: Terraform Format Check
+        run: terraform fmt -check

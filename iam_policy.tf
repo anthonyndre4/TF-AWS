@@ -36,6 +36,20 @@ resource "aws_iam_group_policy" "ro_custom_policy" {
           "secretsmanager:ListSecrets"
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "route53:CreateHostedZone",
+          "route53:ChangeResourceRecordSets",
+          "route53:ListHostedZones",
+          "route53:GetChange",
+          "route53domains:GetDomainDetail",
+          "route53domains:ListDomains",
+          "route53domains:CheckDomainAvailability",
+          "route53domains:ListTagsForDomain"
+        ],
+        "Resource" : "*"
       }
     ]
   })

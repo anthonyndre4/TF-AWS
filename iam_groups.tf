@@ -14,6 +14,6 @@ resource "aws_iam_group_membership" "readonly_membership" {
 
   group      = aws_iam_group.aws-RO.name
   name       = each.value.name
-  users      = [each.value.name]
+  users      = local.users
   depends_on = [aws_iam_user.users]
 }

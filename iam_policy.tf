@@ -71,9 +71,7 @@ resource "aws_iam_policy" "require_mfa_policy" {
 }
 
 resource "aws_iam_user_policy_attachment" "attach_mfa_policy" {
-  for_each = {
-    for user in aws_iam_user.users : user.key => user
-  }
+  for_each   = { for index, user in aws_iam_user.users : index => user }
   user       = each.value.name
   policy_arn = aws_iam_policy.require_mfa_policy.arn
 }

@@ -10,10 +10,10 @@ resource "aws_iam_group" "aws-RO" {
 }
 
 resource "aws_iam_group_membership" "readonly_membership" {
-  for_each = {
-    for user in aws_iam_user.users : user.key => user
-  }
-  group = aws_iam_group.aws-RO.name
-  name  = each.value.name
-  users = aws_iam_user.users[*].name
+  for_each = { for index, user in aws_iam_user.users : index => user }
+
+  group      = aws_iam_group.aws-RO.name
+  name       = each.value.name
+  users      = [each.key]
+  depends_on = [aws_iam_user.users]
 }

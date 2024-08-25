@@ -20,8 +20,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
       - name: Terraform Init
-        run: terraform -chdir=tf init
+        run: terraform init
       - name: Terraform Plan
-        run: terraform -chdir=tf plan
+        run: terraform plan
       - name: Terraform Apply
-        run: terraform -chdir=tf apply -auto-approve
+        run: terraform apply -auto-approve

@@ -8,31 +8,58 @@ resource "aws_route53domains_domain" "aws_domains" {
   domain_name = each.value.domain
   auto_renew  = false
   admin_contact {
-    first_name     = "SledgeTech"
-    last_name      = "Team"
-    contact_type   = "COMPANY"
-    address_line_1 = "UK"
-    city           = "London"
-    phone_number   = "+44.1234567890"    # <-- Add this
-    email          = "admin@sledgetech.co.uk" # <-- Add this
+    first_name        = "SledgeTech"
+    last_name         = "Team"
+    contact_type      = "COMPANY"
+    organization_name = "SledgeTech Ltd"
+    address_line_1    = "123 Example Road"
+    city              = "London"
+    state             = "ABC"
+    zip_code          = "EC1A 1AA"
+    country_code      = "GB"
+    phone_number      = "+44.1234567890"
+    fax               = "+44.2030000000"
+    email             = "admin@sledgetech.co.uk"
+    extra_param {
+      name  = "UK_CONTACT_TYPE"
+      value = "OTHER"
+    }
   }
   registrant_contact {
-    first_name     = "SledgeTech"
-    last_name      = "Team"
-    contact_type   = "COMPANY"
-    address_line_1 = "UK"
-    city           = "London"
-    phone_number   = "+44.1234567890"    # <-- Add this
-    email          = "owner@sledgetech.co.uk" # <-- Add this
+    first_name        = "SledgeTech"
+    last_name         = "Team"
+    contact_type      = "COMPANY"
+    organization_name = "SledgeTech Ltd"
+    address_line_1    = "123 Example Road"
+    city              = "London"
+    state             = "ABC"
+    zip_code          = "EC1A 1AA"
+    country_code      = "GB"
+    phone_number      = "+44.1234567890"
+    fax               = "+44.2030000000"
+    email             = "owner@sledgetech.co.uk"
+    extra_param {
+      name  = "UK_CONTACT_TYPE"
+      value = "OTHER"
+    }
   }
   tech_contact {
-    first_name     = "SledgeTech"
-    last_name      = "Team"
-    contact_type   = "COMPANY"
-    address_line_1 = "UK"
-    city           = "London"
-    phone_number   = "+44.1234567890"    # <-- Add this
-    email          = "tech@sledgetech.co.uk" # <-- Add this
+    first_name        = "SledgeTech"
+    last_name         = "Team"
+    contact_type      = "COMPANY"
+    organization_name = "SledgeTech Ltd"
+    address_line_1    = "123 Example Road"
+    city              = "London"
+    state             = "ABC"
+    zip_code          = "EC1A 1AA"
+    country_code      = "GB"
+    phone_number      = "+44.1234567890"
+    fax               = "+44.2030000000"
+    email             = "tech@sledgetech.co.uk"
+    extra_param {
+      name  = "UK_CONTACT_TYPE"
+      value = "OTHER"
+    }
   }
   dynamic "name_server" {
     for_each = split(",", each.value.name_servers)

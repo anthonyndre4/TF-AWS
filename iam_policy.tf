@@ -109,6 +109,11 @@ resource "aws_iam_role_policy_attachment" "ecr_readonly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+resource "aws_iam_role_policy_attachment" "ecr_poweruser" {
+  role       = aws_iam_role.discord_bot_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+}
+
 resource "aws_iam_instance_profile" "discord_bot_profile" {
   name = "discord-bot-instance-profile"
   role = aws_iam_role.discord_bot_ec2_role.name

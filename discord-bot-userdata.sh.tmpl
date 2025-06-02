@@ -1,4 +1,31 @@
 #!/bin/bash
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+dpkg -i amazon-cloudwatch-agent.deb
+
+cat <<EOC > /opt/aws/amazon-cloudwatch-agent/bin/docker-logs-config.json
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/lib/docker/containers/*/*.log",
+            "log_group_name": "/ec2/discord-bot/docker",
+            "log_stream_name": "{instance_id}-{container_id}",
+            "timezone": "UTC"
+          }
+        ]
+      }
+    }
+  }
+}
+EOC
+
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config -m ec2 \
+  -c file:/opt/aws/amazon-cloudwatch-agent/bin/docker-logs-config.json \
+  -s
+
 apt-get update
 apt-get install -y docker.io awscli
 systemctl start docker

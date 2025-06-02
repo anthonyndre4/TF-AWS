@@ -204,7 +204,8 @@ resource "aws_iam_policy" "github_actions_custom" {
           "iam:ListMFADeviceTags",
           "iam:ListAttachedRolePolicies",
           "iam:GetInstanceProfile",
-          "iam:DeletePolicyVersion"
+          "iam:DeletePolicyVersion",
+          "iam:AttachRolePolicy"
         ],
         Resource = "*"
       }

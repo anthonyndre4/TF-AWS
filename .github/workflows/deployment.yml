@@ -3,6 +3,11 @@ name: TF-Deployment
 'on':
   push:
     branches: ['main']
+permissions:
+  id-token: write
+  contents: read
+env:
+  AWS-ACCOUNT-ID: 682033465466
 jobs:
   deploy-terraform:
     runs-on: ubuntu-latest
@@ -25,3 +30,45 @@ jobs:
         run: terraform plan
       - name: Terraform Apply
         run: terraform apply -auto-approve
+
+  bump_func_versions:
+    runs-on: ubuntu-latest
+    needs: deploy-terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Bump function versions
+        run: |
+          chmod +x ./scripts/bump_versions.sh
+          ./scripts/bump_versions.sh
+
+  deploy_images_to_ecr:
+    runs-on: ubuntu-latest
+    needs: [deploy-terraform, bump_func_versions]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Build and push Docker images for all bots
+        run: |
+          for dir in bots/*/; do
+            if [ -f "$dir/pyproject.toml" ] && [ -f "$dir/Dockerfile" ]; then
+              BOT_NAME=$(basename "$dir")
+              VERSION=$(poetry version -s --directory "$dir")
+              IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/${BOT_NAME}:${VERSION}"
+              docker build -t "$IMAGE" "$dir"
+              docker push "$IMAGE"
+            fi
+          done

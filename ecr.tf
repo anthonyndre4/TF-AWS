@@ -1,8 +1,9 @@
-locals {
-  bot_dirs = [for dir in fileset("${path.module}/bots", "*") : dir if can(fileexists("${path.module}/bots/${dir}/pyproject.toml"))]
-}
+# locals {
+#   bots_config = yamldecode(file("${path.module}/bots.yaml"))
+#   bot_names   = local.bots_config.bots
+# }
 
-resource "aws_ecr_repository" "bot" {
-  for_each = toset(local.bot_dirs)
-  name     = each.key
-}
+# resource "aws_ecr_repository" "bot" {
+#   for_each = toset(local.bot_names)
+#   name     = each.key
+# }

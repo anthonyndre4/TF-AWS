@@ -7,12 +7,12 @@ systemctl enable docker
 REGION="eu-west-2"
 ACCOUNT_ID="682033465466"
 
-BOTS=("chef_kawasaki_bot")
+BOTS="chef_kawasaki_bot"
 TAG="latest"
 
 aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
 
-for BOT in "${BOTS[@]}"; do
+for BOT in $BOTS; do
   IMAGE="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$BOT:$TAG"
   docker pull $IMAGE
   docker run -d --restart always --name $BOT $IMAGE
